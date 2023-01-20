@@ -5,6 +5,7 @@ const { generateToken } = require("../helpers/token");
 
 exports.fanSignUp = async (req, res) => {
   try {
+    console.log("a call from backend.......");
     const {
       firstname,
       lastname,
@@ -78,6 +79,6 @@ exports.fanSignUp = async (req, res) => {
     });
   } catch (error) {
     console.log("error message", error);
-    res.status(500).json({ message: error.message });
+    res.send({ message: error.message });
   }
 };
