@@ -1,8 +1,7 @@
-const { validateLength, validateEmail } = require("../helpers/userValidation");
+
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
-const { generateToken } = require("../helpers/token");
 
 exports.fanSignUp = async (req, res) => {
   try {
