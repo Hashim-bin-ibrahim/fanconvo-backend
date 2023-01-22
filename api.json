@@ -5,7 +5,7 @@
     "title": "Fanconvo Signup API",
     "description": "API for creating new user accounts on Fanconvo"
   },
-  "host": "localhost:9000",
+  "host": "https://wandering-red-hen.cyclic.app",
   "basePath": "/",
   "schemes": ["http"],
   "paths": {
