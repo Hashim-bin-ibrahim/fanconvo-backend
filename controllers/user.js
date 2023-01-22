@@ -1,11 +1,11 @@
 const { validateLength, validateEmail } = require("../helpers/userValidation");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const { validationResult } = require("express-validator");
 const { generateToken } = require("../helpers/token");
 
 exports.fanSignUp = async (req, res) => {
   try {
-    console.log("a call from backend.......");
     const {
       firstname,
       lastname,
@@ -16,36 +16,16 @@ exports.fanSignUp = async (req, res) => {
       talentSignup,
     } = req.body;
 
-    console.log(req.body);
-
-    if (!validateEmail(email)) {
+    const checks = await User.findOne({ email });
+    if (checks) {
       return res.send({
-        error: "invalid email address.",
+        error: "This  mail address already exist",
       });
     }
 
-    const check = await User.findOne({ email });
-    if (check) {
-      return res.send({
-        error:
-          "This email address already exists,try with a different email address",
-      });
-    }
-
-    if (!validateLength(firstname, 3, 30)) {
-      return res.json({
-        error: "first name must between 3 and 30 characters.",
-      });
-    }
-    if (!validateLength(lastname, 3, 30)) {
-      return res.json({
-        error: "last name must between 3 and 30 characters.",
-      });
-    }
-    if (!validateLength(password, 6, 40)) {
-      return res.json({
-        error: "password must be atleast 6 characters.",
-      });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.send({ errors: errors.array() });
     }
 
     const cryptedPassword = await bcrypt.hash(password, 12);
@@ -68,8 +48,7 @@ exports.fanSignUp = async (req, res) => {
       isTalent: isTalent,
     }).save();
 
-    // const token = generateToken({ id: user._id.toString() }, "7d");
-
+    console.log("data saved");
     res.send({
       id: user._id,
       username: user.username,
